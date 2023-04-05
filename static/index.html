@@ -22,7 +22,6 @@
         <button id='button-multiple-images' class="btn btn-outline-secondary" type="button">Generate batch</button>
     </div>
     <div id="image-container" class="container">
-        <img id='result-image' src="" alt="Generated Image">
     </div>
     </div>
 </body>
@@ -41,12 +40,15 @@
         }
 
         const res = await fetch(`/single/${textInput}`)
-
-
         const data = await res.json();
+        console.log(data)
 
-        const resultImage = document.getElementById('result-image');
-        resultImage.src = data;
+        const container = document.getElementById('image-container');
+        /*
+        const img = document.createElement('img');
+        img.src = data
+        container.appendChild(img);
+        */
     })
 
     buttonMultipleImages.addEventListener('click', async () => {
@@ -58,8 +60,16 @@
 
         const res = await fetch(`/multiple/${textInput}`)
         const data = await res.json();
+        console.log(data)
+        
+        const container = document.getElementById('image-container');
 
-        const resultImage = document.getElementById('result-image');
-        resultImage.src = data;
+        /*
+        data.forEach(image_path => {
+            const img = document.createElement('img');
+            img.src = image_path
+            container.appendChild(img)
+        });
+        */
     })
 </script>
