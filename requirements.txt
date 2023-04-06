@@ -7,4 +7,4 @@ requests==2.22.0
 requests-unixsocket==0.2.0
 transformers==4.27.4
 pinecone-client==2.2.1
-torch==2.0.0
+torch==1.13.1
