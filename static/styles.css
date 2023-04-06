@@ -16,11 +16,11 @@
   }
 
   .image-container {
-    padding-top: 20px;
+    padding-top: 50px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 5px;
+    gap: 100px;
   }
 
   img {
