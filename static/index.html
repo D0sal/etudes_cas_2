@@ -18,10 +18,8 @@
     <div class="input-group">
         <input class="form-control shadow-sm p-2" type="text" id="text-input" name="text-input" placeholder="a cute cat"
             required>
-        <button id='button-single-image' class="btn btn-outline-secondary shadow-sm p-2" type="button">Generate an
-            image</button>
-        <button id='button-multiple-images' class="btn btn-outline-secondary shadow-sm p-2" type="button">Generate
-            batch</button>
+        <button id='button-single-image' class="btn btn-outline-secondary shadow-sm p-2" type="button">Find match</button>
+        <button id='button-multiple-images' class="btn btn-outline-secondary shadow-sm p-2" type="button">Find batch of match</button>
     </div>
     <div id='image-container' class="container image-container">
         <div id="loading-element" class="text-center fade-in" hidden>
@@ -48,14 +46,14 @@
         imageCol.classList.add("col");
 
         const image = document.createElement("img");
-        image.src = `static/dataset/${data.data[0]}.jpg`;
+        image.src = `${data.metadata.path}`;
         image.classList.add("img-fluid");
 
         const textCol = document.createElement("div");
         textCol.classList.add("col");
 
-        const paragraph = document.createElement("p");
-        const textContent = "<strong>nathan</strong>"
+        const paragraph = document.createElement("div");
+        const textContent = `Your prompt : ${data.values[0]}`
         paragraph.innerHTML = textContent;
 
         // Add elements to columns
@@ -68,6 +66,15 @@
 
         return row;
     };
+
+    function cleanResult(result) {
+        result = result.images.replaceAll('\n', '');
+        result = result.replaceAll(' ', '');
+        result = result.replaceAll("'",'"' );
+        const data = JSON.parse(result)
+    
+        return data
+    }
 
     const loadingElement = document.getElementById('loading-element');
     const buttonSingleImage = document.getElementById('button-single-image');
@@ -88,12 +95,13 @@
         }
         toggleLoading();
         const res = await fetch(`/single/${textInput}`)
-        const data = await res.json();
+        const result = await res.json();
         toggleLoading();
-        console.log(data.data)
+
+        const data = cleanResult(result)
 
         const container = document.getElementById('image-container');
-        const myRow = createImageTextRow(data);
+        const myRow = createImageTextRow(data.matches[0]);
         container.insertBefore(myRow, loadingElement);
     })
 
@@ -105,17 +113,17 @@
         }
         toggleLoading();
         const res = await fetch(`/multiple/${textInput}`)
-        const data = await res.json();
+        const result = await res.json();
         toggleLoading();
-        console.log(data)
+
+        const data = cleanResult(result)
 
         const container = document.getElementById('image-container');
 
-        /*
-        data.forEach(image_data => {
+        data.matches.forEach(image_data => {
         const myRow = createImageTextRow(image_data);
         container.appendChild(myRow);
         });
-        */
+
     })
 </script>

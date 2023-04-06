@@ -6,7 +6,6 @@ import requests
 from transformers import CLIPProcessor, CLIPModel, CLIPTokenizer,AutoTokenizer, CLIPImageProcessor
 import pathlib
 import numpy
-import torch
 import sys
 import pinecone
 import pandas as pd
@@ -18,7 +17,7 @@ processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
 
 tokenizer = AutoTokenizer.from_pretrained("openai/clip-vit-base-patch32")
 
-path = pathlib.Path('/static/dataset')
+path = pathlib.Path('./static/dataset')
 
 def load_dataset():
   image = {}

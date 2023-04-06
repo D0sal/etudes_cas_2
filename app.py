@@ -1,5 +1,6 @@
-import os
+import json
 from flask import Flask, jsonify
+from find_image import main
 # from your_file import your_function
 app = Flask(__name__, static_folder='static')
 
@@ -11,18 +12,19 @@ def index():
 
 @app.route('/single/<text>', methods=['GET'])
 def generate_single_image(text):
-    # image_paths = python_script(text)
-    # closest_image = image_paths[0]
-    test = {'data': ['0','1','2','3','4']}
-    # return the image as a response
-    return jsonify(test)
+    data = {}
+    data  = str(main(text))
+
+    # return the images as a response
+    return jsonify(images=data)
 
 @app.route('/multiple/<text>', methods=['GET'])
 def generate_multiple_images(text):
-    images = text
+    data = {}
+    data  = str(main(text))
 
     # return the images as a response
-    return jsonify(images=text)
+    return jsonify(images=data)
 
 if __name__ == '__main__':
     app.run(debug=True)
