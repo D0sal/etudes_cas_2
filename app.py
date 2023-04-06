@@ -3,6 +3,7 @@ from flask import Flask, jsonify
 # from your_file import your_function
 app = Flask(__name__, static_folder='static')
 
+
 @app.route('/')
 def index():
 
@@ -12,9 +13,9 @@ def index():
 def generate_single_image(text):
     # image_paths = python_script(text)
     # closest_image = image_paths[0]
-
+    test = {'data': ['0','1','2','3','4']}
     # return the image as a response
-    return jsonify(image=text)
+    return jsonify(test)
 
 @app.route('/multiple/<text>', methods=['GET'])
 def generate_multiple_images(text):

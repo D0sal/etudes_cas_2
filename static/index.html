@@ -6,15 +6,13 @@
     <link href="static/styles.css" rel="stylesheet">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- import ajax jquery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- import Boostrap for simple front end -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 
 <body class="container">
-    <h1 class="blue">Welcome to Etude cas 2</h1>
+    <h1>Welcome to Etude cas 2</h1>
     <p>Created by Nathan Oliveira Da Silva, Léo Bernard, Valentin Borget, Alice Janela Cameijo</p>
     <h6 class="label" for="text-input">Enter a word or phrase:</h6>
     <div class="input-group">
@@ -26,8 +24,8 @@
             batch</button>
     </div>
     <br>
-    <div id="image-container" class="container">
-        <div id="loading-element" class="text-center" hidden>
+    <div id='image-container' class="container">
+        <div id="loading-element" class="text-center fade-in" hidden>
             <div class="spinner-border text-primary" role="status"></div>
         </div>
     </div>
@@ -42,17 +40,46 @@
         loadingElement.hidden = !loadingElement.hidden
     };
 
+    function createImageTextRow(data) {
+        // Create elements
+        const row = document.createElement("div");
+        row.classList.add("row", "fade-in");
+
+        const imageCol = document.createElement("div");
+        imageCol.classList.add("col-md-4");
+
+        const image = document.createElement("img");
+        image.src = `dataset/${data.data[0]}`;
+        image.classList.add("img-fluid");
+
+        const textCol = document.createElement("div");
+        textCol.classList.add("col-md-8");
+
+        const paragraph = document.createElement("p");
+        paragraph.textContent = 'text';
+
+        // Add elements to columns
+        imageCol.appendChild(image);
+        textCol.appendChild(paragraph);
+
+        // Add columns to row
+        row.appendChild(imageCol);
+        row.appendChild(textCol);
+
+        return row;
+    };
+
     const loadingElement = document.getElementById('loading-element');
     const buttonSingleImage = document.getElementById('button-single-image');
     const buttonMultipleImages = document.getElementById('button-multiple-images');
     const textInput = document.getElementById('text-input');
-    textInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                buttonSingleImage.click()
-            }
-        })
-    
+    textInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            buttonSingleImage.click()
+        }
+    })
+
     buttonSingleImage.addEventListener('click', async () => {
         const textInput = document.getElementById('text-input')?.value;
         if (textInput === '') {
@@ -62,14 +89,12 @@
         toggleLoading();
         const res = await fetch(`/single/${textInput}`)
         const data = await res.json();
-        console.log(data)
+        toggleLoading();
+        console.log(data.data)
 
         const container = document.getElementById('image-container');
-        /*
-        const img = document.createElement('img');
-        img.src = data
-        container.appendChild(img);
-        */
+        const myRow = createImageTextRow(data);
+        container.appendChild(myRow);
     })
 
     buttonMultipleImages.addEventListener('click', async () => {
@@ -81,15 +106,15 @@
         toggleLoading();
         const res = await fetch(`/multiple/${textInput}`)
         const data = await res.json();
+        toggleLoading();
         console.log(data)
 
         const container = document.getElementById('image-container');
 
         /*
-        data.forEach(image_path => {
-            const img = document.createElement('img');
-            img.src = image_path
-            container.appendChild(img)
+        data.forEach(image_data => {
+        const myRow = createImageTextRow(image_data);
+        container.appendChild(myRow);
         });
         */
     })
