@@ -134,7 +134,7 @@ def main(prompt):
   if my_index.describe_index_stats()['total_vector_count'] == 0:
     upload_dataset_on_pinecone(my_index)
   
-  text_input = get_text_embedding("A black cat").tolist()
+  text_input = get_text_embedding(prompt).tolist()
 
   probs = my_index.query(text_input, top_k=4, include_metadata=True)
   

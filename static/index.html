@@ -63,7 +63,7 @@
         // Add columns to row
         row.appendChild(imageCol);
         row.appendChild(textCol);
-
+    
         return row;
     };
 
@@ -102,7 +102,7 @@
 
         const container = document.getElementById('image-container');
         const myRow = createImageTextRow(data.matches[0]);
-        container.insertBefore(myRow, loadingElement);
+        container.appendChild(myRow);
     })
 
     buttonMultipleImages.addEventListener('click', async () => {
