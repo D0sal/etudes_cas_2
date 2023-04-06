@@ -23,8 +23,7 @@
         <button id='button-multiple-images' class="btn btn-outline-secondary shadow-sm p-2" type="button">Generate
             batch</button>
     </div>
-    <br>
-    <div id='image-container' class="container">
+    <div id='image-container' class="container image-container">
         <div id="loading-element" class="text-center fade-in" hidden>
             <div class="spinner-border text-primary" role="status"></div>
         </div>
@@ -46,17 +45,18 @@
         row.classList.add("row", "fade-in");
 
         const imageCol = document.createElement("div");
-        imageCol.classList.add("col-md-4");
+        imageCol.classList.add("col");
 
         const image = document.createElement("img");
-        image.src = `dataset/${data.data[0]}`;
+        image.src = `static/dataset/${data.data[0]}.jpg`;
         image.classList.add("img-fluid");
 
         const textCol = document.createElement("div");
-        textCol.classList.add("col-md-8");
+        textCol.classList.add("col");
 
         const paragraph = document.createElement("p");
-        paragraph.textContent = 'text';
+        const textContent = "<strong>nathan</strong>"
+        paragraph.innerHTML = textContent;
 
         // Add elements to columns
         imageCol.appendChild(image);
@@ -94,7 +94,7 @@
 
         const container = document.getElementById('image-container');
         const myRow = createImageTextRow(data);
-        container.appendChild(myRow);
+        container.insertBefore(myRow, loadingElement);
     })
 
     buttonMultipleImages.addEventListener('click', async () => {
