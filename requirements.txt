@@ -5,5 +5,4 @@ requests==2.22.0
 requests-unixsocket==0.2.0
 transformers==4.27.4
 pinecone-client==2.2.1
-pandas==1.5.3
 numpy==1.24.2
