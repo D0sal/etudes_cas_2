@@ -4,7 +4,6 @@ from find_image import main
 # from your_file import your_function
 app = Flask(__name__, static_folder='static')
 
-
 @app.route('/')
 def index():
 
