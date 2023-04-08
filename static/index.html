@@ -18,9 +18,16 @@
     <div class="input-group">
         <input class="form-control shadow-sm p-2" type="text" id="text-input" name="text-input" placeholder="a cute cat"
             required>
-        <button id='button-single-image' class="btn btn-outline-secondary shadow-sm p-2" type="button">Find match</button>
-        <button id='button-multiple-images' class="btn btn-outline-secondary shadow-sm p-2" type="button">Find batch of match</button>
+        <button id='button-single-image' class="btn btn-outline-secondary shadow-sm p-2" type="button">Find
+            match</button>
+        <button id='button-multiple-images' class="btn btn-outline-secondary shadow-sm p-2" type="button">Find batch of
+            match</button>
     </div>
+
+    <div class="clear-button-container">
+        <button id="button-clear" class="btn btn-danger btn-sm" type="button">Clear all</button>
+    </div>
+    
     <div id='image-container' class="container image-container">
         <div id="loading-element" class="text-center fade-in" hidden>
             <div class="spinner-border text-primary" role="status"></div>
@@ -63,29 +70,38 @@
         // Add columns to row
         row.appendChild(imageCol);
         row.appendChild(textCol);
-    
+
         return row;
     };
 
     function cleanResult(result) {
         result = result.images.replaceAll('\n', '');
-        result = result.replaceAll(' ', '');
-        result = result.replaceAll("'",'"' );
+        // result = result.replaceAll(' ', '');
+        result = result.replaceAll("'", '"');
         const data = JSON.parse(result)
-    
+
         return data
     }
 
     const loadingElement = document.getElementById('loading-element');
     const buttonSingleImage = document.getElementById('button-single-image');
     const buttonMultipleImages = document.getElementById('button-multiple-images');
+    const buttonClear = document.getElementById('button-clear');
     const textInput = document.getElementById('text-input');
+    const container = document.getElementById('image-container');
+
+    buttonClear.addEventListener('click', () => {
+        while(container.childElementCount > 1) {
+            container.removeChild(container.lastElementChild);
+        }
+    });
+
     textInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter") {
             event.preventDefault();
             buttonSingleImage.click()
         }
-    })
+    });
 
     buttonSingleImage.addEventListener('click', async () => {
         const textInput = document.getElementById('text-input')?.value;
@@ -98,11 +114,15 @@
         const result = await res.json();
         toggleLoading();
 
+        // clean weird python json into js object
         const data = cleanResult(result)
 
-        const container = document.getElementById('image-container');
+        // put prompt in values
+        data.matches[0].values[0] = textInput;
+
         const myRow = createImageTextRow(data.matches[0]);
-        container.appendChild(myRow);
+        container.insertAdjacentElement('afterbegin', myRow);
+        container.prepend(loadingElement)
     })
 
     buttonMultipleImages.addEventListener('click', async () => {
@@ -116,13 +136,15 @@
         const result = await res.json();
         toggleLoading();
 
+        // clean weird python json into js object
         const data = cleanResult(result)
 
-        const container = document.getElementById('image-container');
-
         data.matches.forEach(image_data => {
-        const myRow = createImageTextRow(image_data);
-        container.appendChild(myRow);
+            //put prompt in values
+            image_data.values[0] = textInput;
+            const myRow = createImageTextRow(image_data);
+            container.insertAdjacentElement('afterbegin', myRow);
+            container.prepend(loadingElement)
         });
 
     })
