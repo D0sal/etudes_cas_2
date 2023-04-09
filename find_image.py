@@ -136,7 +136,7 @@ def main(prompt):
   
   text_input = get_text_embedding(prompt).tolist()
 
-  probs = my_index.query(text_input, top_k=4, include_metadata=True)
+  probs = my_index.query(text_input, top_k=10, include_metadata=True)
   
   
   for elem in probs["matches"]:
